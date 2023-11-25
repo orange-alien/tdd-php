@@ -1,6 +1,7 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
+use src\Dollar;
 
 use function PHPUnit\Framework\assertEquals;
 
