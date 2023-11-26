@@ -17,7 +17,7 @@ abstract class Money
 
     public function currency(): string
     {
-        return $this->currency();
+        return $this->currency;
     }
 
     public function equals(Money $money) : bool
