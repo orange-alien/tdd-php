@@ -3,6 +3,7 @@
 use PHPUnit\Framework\TestCase;
 use src\Money;
 
+use function PHPUnit\Framework\assertEmpty;
 use function PHPUnit\Framework\assertEquals;
 
 class MoneyTest extends TestCase
@@ -25,5 +26,11 @@ class MoneyTest extends TestCase
     {
         $this->assertEquals('USD', (Money::dollar(1))->currency() );
         $this->assertEquals('CHF', (Money::franc(1))->currency() );
+    }
+
+    public function testSimpleAddtion()
+    {
+        $sum = Money::dollar(5)->plus( Money::dollar(5) );
+        $this->assertEquals(Money::dollar(10), $sum);
     }
 }

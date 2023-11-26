@@ -9,11 +9,6 @@ class Money implements Stringable
     protected int $amount;
     protected string $currency;
 
-    function times(int $multiplier) : Money
-    {
-        return new Money($this->amount * $multiplier, $this->currency);
-    }
-
     public function __construct(int $amount, string $currency)
     {
         $this->amount = $amount;
@@ -23,6 +18,11 @@ class Money implements Stringable
     public function times(int $multiplier) : Money
     {
         return new Money($this->amount * $multiplier, $this->currency);
+    }
+
+    public function plus(Money $added) : Money
+    {
+        return new Money($this->amount + $added->amount, $this->currency);
     }
 
     public function currency(): string
