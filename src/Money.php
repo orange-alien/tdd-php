@@ -2,9 +2,10 @@
 
 namespace src;
 
+use src\Interfaces\Expression;
 use Stringable;
 
-class Money implements Stringable
+class Money implements Stringable, Expression
 {
     protected int $amount;
     protected string $currency;
@@ -20,7 +21,7 @@ class Money implements Stringable
         return new Money($this->amount * $multiplier, $this->currency);
     }
 
-    public function plus(Money $added) : Money
+    public function plus(Money $added) : Expression
     {
         return new Money($this->amount + $added->amount, $this->currency);
     }
