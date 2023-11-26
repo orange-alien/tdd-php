@@ -11,7 +11,7 @@ abstract class Money
 
     public function __construct(int $amount, string $currency)
     {
-        $this->amount = $amoun;
+        $this->amount = $amount;
         $this->currency = $currency;
     }
 
