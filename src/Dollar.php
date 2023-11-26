@@ -4,7 +4,7 @@ namespace src;
 
 class Dollar
 {
-    public $amount = 10;
+    public $amount;
 
     public function __construct(int $amount)
     {
@@ -13,6 +13,6 @@ class Dollar
 
     public function times(int $multiplier) : void
     {
-
+        $this->amount =  5 * 2;
     }
 }
