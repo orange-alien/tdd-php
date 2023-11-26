@@ -9,7 +9,10 @@ class Money implements Stringable
     protected int $amount;
     protected string $currency;
 
-    abstract function times(int $multiplier) : Money;
+    function times(int $multiplier) : Money
+    {
+        return new Money($this->amount * $multiplier, $this->currency);
+    }
 
     public function __construct(int $amount, string $currency)
     {

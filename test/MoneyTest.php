@@ -28,13 +28,18 @@ class MoneyTest extends TestCase
     public function testFrancMultiplication()
     {
         $five = Money::Franc(5);
-        $this->assertEquals(Money::Franc(10), $five->times(2));
-        $this->assertEquals(Money::Franc(15), $five->times(3));
+        $this->assertEquals(Money::franc(10), $five->times(2));
+        $this->assertEquals(Money::franc(15), $five->times(3));
     }
 
     public function testCurrency()
     {
         assertEquals('USD', (Money::dollar(1))->currency() );
         assertEquals('CHF', (Money::franc(1))->currency() );
+    }
+
+    public function testDifferentClassEquality()
+    {
+        $this->assertTrue( (new Money(10, 'CHF'))->equals( new Franc(10, 'CHF') ) );
     }
 }
