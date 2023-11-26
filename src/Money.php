@@ -2,7 +2,9 @@
 
 namespace src;
 
-abstract class Money
+use Stringable;
+
+class Money implements Stringable
 {
     protected int $amount;
     protected string $currency;
@@ -34,5 +36,10 @@ abstract class Money
     public static function franc(int $amount) : Money
     {
         return new Franc($amount, 'CHF');
+    }
+
+    public function __toString()
+    {
+        return $this->amount . ' ' . $this->currency;
     }
 }
