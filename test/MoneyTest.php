@@ -5,6 +5,8 @@ use src\Dollar;
 use src\Franc;
 use src\Money;
 
+use function PHPUnit\Framework\assertEquals;
+
 class MoneyTest extends TestCase
 {
     public function testMultiplication()
@@ -28,5 +30,11 @@ class MoneyTest extends TestCase
         $five = new Franc(5);
         $this->assertEquals(new Franc(10), $five->times(2));
         $this->assertEquals(new Franc(15), $five->times(3));
+    }
+
+    public function testCurrency()
+    {
+        assertEquals('USD', Money::dollar(1)->currency() );
+        assertEquals('CHF', Money::dollar(1)->currency() );
     }
 }
