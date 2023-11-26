@@ -28,7 +28,7 @@ class Money implements Stringable
     public function equals(Money $money) : bool
     {
         return $this->amount === $money->amount
-                && get_class($this) === get_class($money);
+                && $this->currency() === $money->currency();
     }
 
     public static function dollar(int $amount) : Money
