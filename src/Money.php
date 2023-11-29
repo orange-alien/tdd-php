@@ -26,11 +26,9 @@ class Money implements Stringable, Expression
         return new Sum($this, $added);
     }
 
-    public function reduce(Bank $bnak, String $to) : Money
+    public function reduce(Bank $bank, String $to) : Money
     {
-        $rate = ($this->currency === 'CHF' && $to === 'USD')
-                    ? 2
-                    : 1;
+        $rate = $bank->rate($this->currency, $to);
         return new Money($this->amount / $rate, $to);
     }
 
