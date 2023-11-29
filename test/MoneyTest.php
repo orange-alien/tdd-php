@@ -3,6 +3,7 @@
 use PHPUnit\Framework\TestCase;
 use src\Bank;
 use src\Money;
+use src\Sum;
 
 use function PHPUnit\Framework\assertEmpty;
 use function PHPUnit\Framework\assertEquals;
@@ -36,5 +37,15 @@ class MoneyTest extends TestCase
         $bank = new Bank();
         $reduced = $bank->reduce($sum, 'USD');
         $this->assertEquals(Money::dollar(10), $reduced);
+    }
+
+    public function testPlusReturnsSum()
+    {
+        $five = Money::dollar(5);
+        $result = $five->plus($five);
+        assert($result instanceof Sum);
+        $sum = $result;
+        $this->assertEquals($five, $sum->augend);
+        $this->assertEquals($five, $sum->addend);
     }
 }

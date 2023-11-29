@@ -23,7 +23,7 @@ class Money implements Stringable, Expression
 
     public function plus(Money $added) : Expression
     {
-        return new Money($this->amount + $added->amount, $this->currency);
+        return new Sum($this, $added);
     }
 
     public function currency(): string
