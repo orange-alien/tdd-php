@@ -7,8 +7,8 @@ use Stringable;
 
 class Money implements Stringable, Expression
 {
-    protected int $amount;
-    protected string $currency;
+    public readonly int $amount;
+    public readonly string $currency;
 
     public function __construct(int $amount, string $currency)
     {
@@ -16,14 +16,20 @@ class Money implements Stringable, Expression
         $this->currency = $currency;
     }
 
-    public function times(int $multiplier) : Money
+    public function times(int $multiplier) : Expression
     {
         return new Money($this->amount * $multiplier, $this->currency);
     }
 
-    public function plus(Money $added) : Expression
+    public function plus(Expression $added) : Expression
     {
-        return new Money($this->amount + $added->amount, $this->currency);
+        return new Sum($this, $added);
+    }
+
+    public function reduce(Bank $bank, String $to) : Money
+    {
+        $rate = $bank->rate($this->currency, $to);
+        return new Money($this->amount / $rate, $to);
     }
 
     public function currency(): string

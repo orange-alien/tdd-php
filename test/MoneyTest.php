@@ -2,10 +2,14 @@
 
 use PHPUnit\Framework\TestCase;
 use src\Bank;
+use src\Interfaces\Expression;
 use src\Money;
+use src\Pair;
+use src\PairMap;
+use src\Sum;
 
-use function PHPUnit\Framework\assertEmpty;
 use function PHPUnit\Framework\assertEquals;
+use function PHPUnit\Framework\assertNotEquals;
 
 class MoneyTest extends TestCase
 {
@@ -36,5 +40,103 @@ class MoneyTest extends TestCase
         $bank = new Bank();
         $reduced = $bank->reduce($sum, 'USD');
         $this->assertEquals(Money::dollar(10), $reduced);
+    }
+
+    public function testPlusReturnsSum()
+    {
+        $five = Money::dollar(5);
+        $result = $five->plus($five);
+        assert($result instanceof Sum);
+        $sum = $result;
+        $this->assertEquals($five, $sum->augend);
+        $this->assertEquals($five, $sum->addend);
+    }
+
+    public function testReduceSum()
+    {
+        $sum = new Sum( Money::dollar(3), Money::dollar(4) );
+        $bank = new Bank();
+        $result = $bank->reduce($sum, 'USD');
+        assertEquals(Money::dollar(7), $result);
+    }
+
+    public function testReduceMoney()
+    {
+        $bank = new Bank();
+        $result = $bank->reduce( Money::dollar(1), 'USD' );
+        assertEquals( Money::dollar(1), $result );
+    }
+
+    public function testReduceMoneyDifferentCurrency()
+    {
+        $bank = new Bank();
+        $bank->addRate('CHF', 'USD', 2);
+        $result = $bank->reduce( Money::franc(2), 'USD' );
+        assertEquals( Money::dollar(1), $result );
+    }
+
+    public function testIdentityRate()
+    {
+        assertEquals(1, (new Bank())->rate('USD','USD') );
+    }
+
+    public function testMixedAddition()
+    {
+        $fiveBucks = Money::dollar(5);
+        $tenFrancs = Money::franc(10);
+
+        $bank = new Bank();
+        $bank->addRate('CHF', 'USD', 2);
+        $result = $bank->reduce($fiveBucks->plus($tenFrancs), 'USD');
+        assertEquals(Money::dollar(10), $result);
+    }
+
+    public function testSumPlusMoney()
+    {
+        $fiveBucks = Money::dollar(5);
+        $tenFrancs = Money::franc(10);
+        $bank = new Bank();
+        $bank->addRate('CHF', 'USD', 2);
+        $sum = ( new Sum($fiveBucks, $tenFrancs) )->plus($fiveBucks);
+        $result = $bank->reduce($sum, 'USD');
+        assertEquals(Money::dollar(15), $result);
+    }
+
+    public function testMoneyTimes()
+    {
+        $fiveBucks = Money::dollar(5);
+        $tenFrancs = Money::franc(10);
+        $bank = new Bank();
+        $bank->addRate('CHF', 'USD', 2);
+        $sum = ( new Sum($fiveBucks, $tenFrancs) )->times(2);
+        $result = $bank->reduce($sum, 'USD');
+        assertEquals(Money::dollar(20), $result);
+    }
+
+
+
+
+
+
+    public function testPair()
+    {
+        $pair = new Pair('a', 'b');
+        assertEquals( $pair, new Pair('a', 'b') );
+        assertNotEquals( $pair, new Pair('b', 'a') );
+
+        assertEquals('a', $pair->from);
+        assertEquals('b', $pair->to);
+        assertEquals('a, b', $pair->__toString());
+
+    }
+
+    public function testMap()
+    {
+        $pair = new Pair('a', 'b');
+        $map  = new PairMap();
+        $map->put($pair, 1);
+        $value = $map->get($pair);
+        assertEquals($value, 1);
+        assertNotEquals($value, 2);
     }
 }
