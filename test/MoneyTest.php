@@ -3,10 +3,12 @@
 use PHPUnit\Framework\TestCase;
 use src\Bank;
 use src\Money;
+use src\Pair;
+use src\PairMap;
 use src\Sum;
 
-use function PHPUnit\Framework\assertEmpty;
 use function PHPUnit\Framework\assertEquals;
+use function PHPUnit\Framework\assertNotEquals;
 
 class MoneyTest extends TestCase
 {
@@ -70,5 +72,26 @@ class MoneyTest extends TestCase
         $bank->addRate('CHF', 'USD', 2);
         $result = $bank->reduce( Money::franc(2), 'USD' );
         assertEquals( Money::dollar(1), $result );
+    }
+    public function testPair()
+    {
+        $pair = new Pair('a', 'b');
+        assertEquals( $pair, new Pair('a', 'b') );
+        assertNotEquals( $pair, new Pair('b', 'a') );
+
+        assertEquals('a', $pair->from);
+        assertEquals('b', $pair->to);
+        assertEquals('a, b', $pair->__toString());
+
+    }
+
+    public function testMap()
+    {
+        $pair = new Pair('a', 'b');
+        $map  = new PairMap();
+        $map->put($pair, 1);
+        $value = $map->get($pair);
+        assertEquals($value, 1);
+        assertNotEquals($value, 2);
     }
 }
